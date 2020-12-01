@@ -3,14 +3,18 @@ with open('data.txt') as fp:
 
 expenses = sorted(int(item)for item in items)
 
-left = 0
-right = -1
 
-while (total := expenses[left] + expenses[right]) != 2020:
-    if total < 2020:
-        left += 1
+def find_pair(expenses, left=0, right=-1, offset=0):
+    while (total := expenses[left] + expenses[right] + offset) != 2020:
+        if total < 2020:
+            left += 1
 
-    if total > 2020:
-        right -= 1
+        if total > 2020:
+            right -= 1
+
+    return left, right
+
+
+left, right = find_pair(expenses)
 
 print(expenses[left] * expenses[right])
