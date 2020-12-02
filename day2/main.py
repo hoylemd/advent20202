@@ -1,5 +1,5 @@
-# FILENAME = 'data.txt'
-FILENAME = 'test.txt'
+FILENAME = 'data.txt'
+# FILENAME = 'test.txt'
 
 with open(FILENAME) as fp:
     items = fp.readlines()
