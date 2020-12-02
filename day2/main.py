@@ -14,8 +14,8 @@ def parse_entry(entry):
 
     policy = {
         'char': policy_parts[1],
-        'min': int(range_parts[0]),
-        'max': int(range_parts[1]),
+        '1st': int(range_parts[0]) - 1,
+        '2nd': int(range_parts[1]) - 1,
         'raw': parts[0]
     }
 
@@ -25,16 +25,23 @@ def parse_entry(entry):
 def is_valid(entry):
     policy, password = parse_entry(entry)
 
-    n_c = password.count(policy['char'])
+    print(
+        f"expecting '{policy['char']}' to appear at index {policy['1st']} XOR {policy['2nd']} "
+        f"in pw {password} ({policy['raw']})"
+    )
 
-    print(f"char '{policy['char']}' appears {n_c} times in pw {password} ({policy['raw']})")
-    if n_c < policy['min']:
-        return False
+    c1 = password[policy['1st']]
+    c2 = password[policy['2nd']]
+    if (
+        c1 == policy['char']
+        and c2 != policy['char']
+    ) or (
+        c1 != policy['char']
+        and c2 == policy['char']
+    ):
+        return True
 
-    if n_c > policy['max']:
-        return False
-
-    return True
+    return False
 
 
 answer = 0
