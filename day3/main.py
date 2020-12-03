@@ -1,5 +1,5 @@
-# FILENAME = 'data.txt'
-FILENAME = 'test.txt'
+FILENAME = 'data.txt'
+# FILENAME = 'test.txt'
 
 def count_trees(rows, d_x, d_y):
     trees = 0
