@@ -1,7 +1,8 @@
-# FILENAME = 'data.txt'
-FILENAME = 'test.txt'
-
 DEBUG = True
+
+FILENAME = 'data.txt'
+if DEBUG:
+    FILENAME = 'test.txt'
 
 with open(FILENAME) as fp:
     items = fp.readlines()
