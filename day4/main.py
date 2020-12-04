@@ -24,7 +24,8 @@ def gen_passports(lines):
             k, v = field.split(':')
             pport[k] = v
 
-    yield pport
+    if pport:
+        yield pport
 
 
 def is_between(value, at_least, at_most):
@@ -40,7 +41,7 @@ def is_between(value, at_least, at_most):
 
 def year_validator(at_least, at_most):
     def valid8r(value):
-        if re.match(r'[0-9]{4}', value):
+        if re.fullmatch(r'[0-9]{4}', value):
             return is_between(value, at_least, at_most)
 
         return False
@@ -61,7 +62,7 @@ def height_validator(value):
 
 
 def hair_validator(value):
-    return re.match(r'#[0-9a-f]{6}', value)
+    return re.fullmatch(r'#[0-9a-f]{6}', value)
 
 
 def eye_validator(value):
@@ -69,7 +70,7 @@ def eye_validator(value):
 
 
 def pid_validator(value):
-    return re.match(r'[0-9]{9}', value)
+    return re.fullmatch(r'[0-9]{9}', value)
 
 
 VALID8RS = {
@@ -109,6 +110,15 @@ def validate_passport(passport):
     return True
 
 
+def fmt_pport(pport):
+    def fmt_fld(k, v):
+        if k == 'hgt' and v[-2:] == 'in':
+            return ' ' + v
+        return v
+
+    return{k: fmt_fld(k, pport[k]) for k in sorted(pport) if k != 'cid'}
+
+
 answer = 0
 n = 0
 
@@ -116,9 +126,11 @@ for pport in gen_passports(lines):
     n += 1
     if validate_passport(pport):
         answer += 1
+        print(f"#{n}   valid: {fmt_pport(pport)}")
     else:
         if DEBUG:
-            print(f"#{n} invalid: {pport}")
+            pass
+            # print(f"#{n} INVALID: {fmt_pport(pport)}")
 
 if DEBUG:
     print(f"{answer} of {n} are valid.")
