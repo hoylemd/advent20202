@@ -90,28 +90,37 @@ def validate_passport(passport):
     present_keys = set(passport.keys())
 
     satisfied = REQUIRED_FIELDS.intersection(present_keys)
-    if DEBUG:
-        print(f"{present_keys=}{satisfied=}")
 
     if satisfied != REQUIRED_FIELDS:
+        if DEBUG:
+            print(f"Missing required fields: {REQUIRED_FIELDS.difference(satisfied)}")
         return False
 
     for key, value in passport.items():
         validator = VALID8RS.get(key)
         if validator is None or validator(value):
             continue
+
+        if DEBUG:
+            print(f"{key}:{value} invalid")
+
         return False
 
     return True
 
 
 answer = 0
+n = 0
 
 for pport in gen_passports(lines):
+    n += 1
     if validate_passport(pport):
         answer += 1
     else:
         if DEBUG:
-            print(f"invalid: {pport}")
+            print(f"#{n} invalid: {pport}")
 
-print(answer)
+if DEBUG:
+    print(f"{answer} of {n} are valid.")
+else:
+    print(answer)
