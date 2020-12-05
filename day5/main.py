@@ -5,7 +5,7 @@ if DEBUG:
     FILENAME = 'test.txt'
 
 with open(FILENAME) as fp:
-    items = [line.strip() for line in fp.readlines()]
+    items = [line.strip() for line in fp.readlines() if line.strip()]
 
 
 class Seat:
@@ -75,11 +75,13 @@ answer = 0
 for item in items:
     if DEBUG:
         print(f"{item=}")
-        seat = Seat(item)
 
-        if seat.id > answer:
-            answer = seat.id
+    seat = Seat(item)
 
+    if seat.id > answer:
+        answer = seat.id
+
+    if DEBUG:
         print(seat)
 
 
