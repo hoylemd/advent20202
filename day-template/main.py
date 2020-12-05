@@ -1,8 +1,7 @@
 DEBUG = True
 
-FILENAME = 'data.txt'
-if DEBUG:
-    FILENAME = 'test.txt'
+FILENAME = 'test.txt'
+# FILENAME = 'data.txt'
 
 with open(FILENAME) as fp:
     items = [line.strip() for line in fp.readlines()]
@@ -15,5 +14,7 @@ for item in items:
     # --- do work here ---
     pass
 
+if DEBUG:
+    print('---- DEBUG ENDS ----')
 
 print(answer)
