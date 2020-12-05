@@ -5,7 +5,7 @@ if DEBUG:
     FILENAME = 'test.txt'
 
 with open(FILENAME) as fp:
-    items = fp.readlines()
+    items = [line.strip() for line in fp.readlines()]
 
 answer = 0
 
