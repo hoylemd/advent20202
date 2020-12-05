@@ -1,8 +1,7 @@
-DEBUG = True
+DEBUG = False
 
+FILENAME = 'test.txt'
 FILENAME = 'data.txt'
-if DEBUG:
-    FILENAME = 'test.txt'
 
 with open(FILENAME) as fp:
     items = [line.strip() for line in fp.readlines() if line.strip()]
@@ -84,15 +83,24 @@ for item in items:
     if DEBUG:
         print(seat)
 
+if DEBUG:
+    print(sorted(seat_ids))
+
 prev = None
 for id in sorted(seat_ids):
     if prev is None:
         prev = id
         continue
 
+    if DEBUG:
+        print(f"trying {id=} {prev=}")
     if id - prev > 1:
         answer = prev + 1
         break
 
-print()
+    prev = id
+
+if DEBUG:
+    print()
+
 print(answer)
