@@ -71,6 +71,7 @@ class Seat:
 
 
 answer = 0
+seat_ids = []
 
 for item in items:
     if DEBUG:
@@ -78,12 +79,20 @@ for item in items:
 
     seat = Seat(item)
 
-    if seat.id > answer:
-        answer = seat.id
+    seat_ids.append(seat.id)
 
     if DEBUG:
         print(seat)
 
+prev = None
+for id in sorted(seat_ids):
+    if prev is None:
+        prev = id
+        continue
+
+    if id - prev > 1:
+        answer = prev + 1
+        break
 
 print()
 print(answer)
