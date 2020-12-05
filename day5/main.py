@@ -29,7 +29,8 @@ class Seat:
 
         this_step = code[:1]
         rest = code[1:]
-        print(f"Parsing '{this_step}':{rest} ({min_v}, {max_v})")
+        if DEBUG:
+            print(f"Parsing '{this_step}':{rest} ({min_v}, {max_v})")
 
         delta = int((max_v - min_v + 1) / 2)
 
@@ -53,7 +54,8 @@ class Seat:
 
         this_step = code[:1]
         rest = code[1:]
-        print(f"Parsing '{this_step}':{rest} ({min_v}, {max_v})")
+        if DEBUG:
+            print(f"Parsing '{this_step}':{rest} ({min_v}, {max_v})")
 
         delta = int((max_v - min_v + 1) / 2)
 
@@ -73,8 +75,13 @@ answer = 0
 for item in items:
     if DEBUG:
         print(f"{item=}")
+        seat = Seat(item)
 
-        print(Seat(item))
+        if seat.id > answer:
+            answer = seat.id
+
+        print(seat)
 
 
+print()
 print(answer)
