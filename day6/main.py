@@ -1,14 +1,13 @@
-DEBUG = True
+DEBUG = False  # True
 
-FILENAME = 'test.txt'
-# FILENAME = 'data.txt'
+# FILENAME = 'test.txt'
+FILENAME = 'data.txt'
 
 with open(FILENAME) as fp:
     lines = [line.strip() for line in fp.readlines()]
 
 answer = 0
-
-affirmatives = set()
+affirmatives = None
 
 for line in lines:
     if DEBUG:
@@ -20,10 +19,13 @@ for line in lines:
         answer += len(affirmatives)
         if DEBUG:
             print(f"{answer=}")
-        affirmatives = set()
+        affirmatives = None
         continue
 
-    affirmatives |= set(line)
+    if affirmatives is None:
+        affirmatives = set(line)
+    else:
+        affirmatives &= set(line)
 
 
 if DEBUG:
