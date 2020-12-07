@@ -35,17 +35,39 @@ class Rule:
         return f"{self.colour}: {self.contents}"
 
 
+def find_outers(rules, my_bag):
+    may_contain_bags = set()
+    dunno_yet = set()
+    nope = set()
+
+    for colour, contents in rules.items():
+        if my_bag in contents:
+            may_contain_bags.add(colour)
+        elif contents:
+            dunno_yet.add(colour)
+        else:
+            nope.add(colour)
+
+    while(dunno_yet):
+        this_step = dunno_yet
+        dunno_yet = set()
+
+        for colour in this_step:
+            contents = set(rules[colour].keys())
+            if may_contain_bags & contents:
+                may_contain_bags.add(colour)
+            elif nope & contents == contents:
+                nope.add(colour)
+            else:
+                dunno_yet.add(colour)
+
+    return len(may_contain_bags)
+
+
 with open(FILENAME) as fp:
     rule_specs = [line.strip() for line in fp.readlines()]
 
-answer = 0
 rules = {}
-
-may_contain_bags = set()
-dunno_yet = set()
-nope = set()
-
-my_bag = 'shiny gold'
 
 for spec in rule_specs:
     if DEBUG:
@@ -54,28 +76,8 @@ for spec in rule_specs:
     rule = Rule(spec)
     rules[rule.colour] = rule.contents
 
-    if my_bag in rule.contents:
-        may_contain_bags.add(rule.colour)
-    elif rule.contents:
-        dunno_yet.add(rule.colour)
-    else:
-        nope.add(rule.colour)
-
-while(dunno_yet):
-    this_step = dunno_yet
-    dunno_yet = set()
-
-    for colour in this_step:
-        contents = set(rules[colour].keys())
-        if may_contain_bags & contents:
-            may_contain_bags.add(colour)
-        elif nope & contents == contents:
-            nope.add(colour)
-        else:
-            dunno_yet.add(colour)
-
-
+answer = find_outers(rules, 'shiny gold')
 if DEBUG:
     print('---- DEBUG ENDS ----')
 
-print(len(may_contain_bags))
+print(answer)
