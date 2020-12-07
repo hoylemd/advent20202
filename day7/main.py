@@ -36,18 +36,46 @@ class Rule:
 
 
 with open(FILENAME) as fp:
-    rules = [line.strip() for line in fp.readlines()]
+    rule_specs = [line.strip() for line in fp.readlines()]
 
 answer = 0
+rules = {}
 
-for spec in rules:
+may_contain_bags = set()
+dunno_yet = set()
+nope = set()
+
+my_bag = 'shiny gold'
+
+for spec in rule_specs:
     if DEBUG:
         print(f"{spec=}")
 
     rule = Rule(spec)
-    print(rule)
+    rules[rule.colour] = rule.contents
+
+    if my_bag in rule.contents:
+        may_contain_bags.add(rule.colour)
+    elif rule.contents:
+        dunno_yet.add(rule.colour)
+    else:
+        nope.add(rule.colour)
+
+while(dunno_yet):
+    this_step = dunno_yet
+    dunno_yet = set()
+
+    for colour in this_step:
+        contents = set(rules[colour].keys())
+        if may_contain_bags & contents:
+            may_contain_bags.add(colour)
+        elif nope & contents == contents:
+            nope.add(colour)
+        else:
+            dunno_yet.add(colour)
+
 
 if DEBUG:
     print('---- DEBUG ENDS ----')
 
-print(answer)
+print(len(may_contain_bags))
