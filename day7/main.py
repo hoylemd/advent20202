@@ -36,6 +36,7 @@ class Rule:
 
 
 def find_outers(rules, my_bag):
+    """Part 1"""
     may_contain_bags = set()
     dunno_yet = set()
     nope = set()
@@ -64,6 +65,32 @@ def find_outers(rules, my_bag):
     return len(may_contain_bags)
 
 
+def count_inners(rules, colour):
+    """Part 2"""
+    total_inners = 0
+
+    contents = rules[colour]
+
+    if DEBUG:
+        print(f"Counting contents of {colour} bag:")
+
+    for colour, n in contents.items():
+        if DEBUG:
+            print(f" - contains {n} {colour} bags...")
+        total_inners += n
+        these_inners = count_inners(rules, colour)
+
+        if DEBUG:
+            print(f" - {colour} bags contain {these_inners}")
+
+        total_inners += n * these_inners
+
+        if DEBUG:
+            print(f" So we're up to {total_inners} now.")
+
+    return total_inners
+
+
 with open(FILENAME) as fp:
     rule_specs = [line.strip() for line in fp.readlines()]
 
@@ -76,7 +103,7 @@ for spec in rule_specs:
     rule = Rule(spec)
     rules[rule.colour] = rule.contents
 
-answer = find_outers(rules, 'shiny gold')
+answer = count_inners(rules, 'shiny gold')
 if DEBUG:
     print('---- DEBUG ENDS ----')
 
