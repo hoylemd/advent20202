@@ -1,7 +1,7 @@
-DEBUG = False  # True
+DEBUG = True
 
-# FILENAME = 'test.txt'
-FILENAME = 'data.txt'
+FILENAME = 'test.txt'
+# FILENAME = 'data.txt'
 
 
 def debug(*args):
@@ -48,7 +48,30 @@ def run_code(instructions):
             instr_idx += 1
 
 
-answer, error = run_code(instructions)
+def repair_code(instructions):
+    """Part 2"""
+    for i in range(len(instructions)):
+        op, arg = instructions[i]
+
+        if op == 'acc':
+            continue
+
+        if op == 'nop':
+            probe = ('jmp', arg)
+        else:
+            probe = ('nop', arg)
+
+        attempt = instructions[:i] + [probe] + instructions[i + 1:]
+
+        retval, error = run_code(attempt)
+
+        if error is None:
+            break
+
+    return retval, error
+
+
+answer, error = repair_code(instructions)
 
 debug('---- DEBUG ENDS ----')
 
