@@ -1,7 +1,12 @@
-DEBUG = True
+DEBUG = False  # True
 
-FILENAME = 'test.txt'
-# FILENAME = 'data.txt'
+# FILENAME = 'test.txt'
+FILENAME = 'data.txt'
+
+
+def debug(*args):
+    if DEBUG:
+        print(*args)
 
 
 def parse_instruction(line):
@@ -12,35 +17,39 @@ def parse_instruction(line):
 with open(FILENAME) as fp:
     instructions = [parse_instruction(line) for line in fp.readlines()]
 
-acc = 0
-instr_idx = 0
-crumbs = set()
 
-while True:
-    try:
-        instr = instructions[instr_idx]
-    except IndexError:
-        break
+def run_code(instructions):
+    """Part 1"""
+    acc = 0
+    instr_idx = 0
+    crumbs = set()
 
-    if DEBUG:
-        print(f"{instr=}")
+    while True:
+        try:
+            instr = instructions[instr_idx]
+        except IndexError:
+            return acc, None
 
-    if instr_idx in crumbs:
-        break
+        debug(f"{instr=}")
 
-    crumbs.add(instr_idx)
+        if instr_idx in crumbs:
+            return acc, 'loop'
 
-    op, arg = instr
+        crumbs.add(instr_idx)
 
-    if op == 'acc':
-        acc += arg
+        op, arg = instr
 
-    if op == 'jmp':
-        instr_idx += arg
-    else:
-        instr_idx += 1
+        if op == 'acc':
+            acc += arg
 
-if DEBUG:
-    print('---- DEBUG ENDS ----')
+        if op == 'jmp':
+            instr_idx += arg
+        else:
+            instr_idx += 1
 
-print(acc)
+
+answer, error = run_code(instructions)
+
+debug('---- DEBUG ENDS ----')
+
+print(answer)
