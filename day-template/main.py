@@ -1,5 +1,11 @@
 DEBUG = True
 
+
+def debug(*args):
+    if DEBUG:
+        print(*args)
+
+
 FILENAME = 'test.txt'
 # FILENAME = 'data.txt'
 
@@ -9,12 +15,10 @@ with open(FILENAME) as fp:
 answer = 0
 
 for item in items:
-    if DEBUG:
-        print(f"{item=}")
+    debug(f"{item=}")
     # --- do work here ---
     pass
 
-if DEBUG:
-    print('---- DEBUG ENDS ----')
+debug('---- DEBUG ENDS ----')
 
 print(answer)
