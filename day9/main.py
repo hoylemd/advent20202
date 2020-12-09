@@ -6,14 +6,10 @@ def debug(*args):
         print(*args)
 
 
-preamble_length = 5
+prefix = 5
 FILENAME = 'test.txt'
-# preamble_length = 25
+# prefix = 25
 # FILENAME = 'data.txt'
-
-
-with open(FILENAME) as fp:
-    items = [int(line) for line in fp.readlines()]
 
 
 def validate_num(num, history):
@@ -35,18 +31,28 @@ def validate_num(num, history):
     return True
 
 
-answer = 0
-i = preamble_length
-while i < len(items):
-    item = items[i]
-    debug(f"{item=}")
+def find_crack(items, prefix):
+    """Part 1"""
+    answer = 0
+    i = prefix
+    while i < len(items):
+        item = items[i]
+        debug(f"{item=}")
 
-    history = items[i - preamble_length:i]
-    if not validate_num(item, history):
-        answer = item
-        break
+        history = items[i - prefix:i]
+        if not validate_num(item, history):
+            answer = item
+            break
 
-    i += 1
+        i += 1
+
+    return answer
+
+
+with open(FILENAME) as fp:
+    items = [int(line) for line in fp.readlines()]
+
+answer = find_crack(items, prefix)
 
 debug('---- DEBUG ENDS ----')
 
