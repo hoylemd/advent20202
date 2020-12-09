@@ -49,10 +49,31 @@ def find_crack(items, prefix):
     return answer
 
 
+def exploit(items, crack):
+    """Part 2"""
+    i = 0
+
+    while i < len(items):
+        n = i + 2
+        while (total := sum(span := items[i:n])) < crack:
+            debug(f"{i=} {n=}")
+            debug(f"{span} ({total}) < {crack}")
+            n += 1
+
+        if total == crack:
+            debug(f"{span} ({total}) = {crack}")
+            return min(span) + max(span)
+        else:
+            debug(f"{span} ({total}) > {crack}")
+
+        i += 1
+
+
 with open(FILENAME) as fp:
     items = [int(line) for line in fp.readlines()]
 
-answer = find_crack(items, prefix)
+crack = find_crack(items, prefix)
+answer = exploit(items, crack)
 
 debug('---- DEBUG ENDS ----')
 
