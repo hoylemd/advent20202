@@ -1,3 +1,5 @@
+import fileinput
+
 DEBUG = True
 
 
@@ -6,15 +8,11 @@ def debug(*args):
         print(*args)
 
 
-FILENAME = 'test.txt'
-# FILENAME = 'data.txt'
-
-with open(FILENAME) as fp:
-    items = [line.strip() for line in fp.readlines()]
+lines = [line.strip() for line in fileinput.input()]
 
 answer = 0
 
-for item in items:
+for item in lines:
     debug(f"{item=}")
     # --- do work here ---
     pass
