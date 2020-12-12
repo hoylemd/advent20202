@@ -1,6 +1,6 @@
 import fileinput
 
-DEBUG = True
+DEBUG = False
 
 
 def debug(*args):
@@ -35,29 +35,39 @@ def get_jumps(adapters):
     return jolt_jumps
 
 
-def count_optional(adapters):
+def accumulate_paths(adapters):
     """Part 2"""
-    optional = 0
-    last_req = 0
+    adapters = [0] + adapters
+    queue = [0]
+    paths = [0] * len(adapters)
+    seen = set()
 
-    for i in range(len(adapters)):
-        this = adapters[i]
-        try:
-            next_one = adapters[i + 1]
-        except IndexError:
-            next_one = this + 3
+    paths[0] = 1
 
-        if this - last_req < 4 and next_one - last_req < 4:
-            debug(f"{this} is optional")
-            optional += 1
-        else:
-            debug(f"{this} is not optional")
-            last_req = this
+    while queue:
+        debug(f"{queue=}")
+        debug(f"{paths=}")
+        debug(f"{seen=}")
 
-    return optional
+        top = queue[0]
+        queue = queue[1:]
+        i = 0
+        for node in adapters:
+            diff = node - adapters[top]
+
+            debug(f"{node} - {adapters[top]} = {diff}")
+            if diff > 0 and diff < 4:
+                paths[i] += paths[top]
+                if node not in seen:
+                    debug(f"adding {node} to seen")
+                    queue.append(i)
+                    seen.add(node)
+            i += 1
+        debug()
+    return paths[-1]
 
 
-answer = 2 ** count_optional(adapters)
+answer = accumulate_paths(adapters)
 
 debug('---- DEBUG ENDS ----')
 
