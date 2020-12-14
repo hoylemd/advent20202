@@ -30,21 +30,36 @@ def find_wait_and_bus(epoch, schedule):
     return wait, bus_no
 
 
-def indexed(iterator):
-    i = 0
-    for item in iterator:
-        yield item, i
-        i += 1
-
-
 def validate_winning_timestamp(timestamp, schedule):
     """Part 2"""
-    offsets = {int(bus): i for bus, i in indexed(schedule) if bus != 'x'}
-    earliest = 0
+    offsets = [(int(bus), i) for i, bus in enumerate(schedule) if bus != 'x']
 
-    debug(offsets)
+    for bus, offset in offsets:
+        result = (timestamp + offset) / bus
+        if result != int(result):
+            return False
 
-    return earliest
+    return True
+
+
+def find_winning_timestamp(schedule):
+    """Part 2"""
+    offsets = [(int(bus), i) for i, bus in enumerate(schedule) if bus != 'x']
+
+    interval, timestamp = offsets.pop(0)
+
+    while offsets:
+        period, offset = offsets[0]
+        if (timestamp + offset) % period == 0:
+            interval *= period
+            offsets.pop(0)
+        else:
+            timestamp += interval
+
+    if validate_winning_timestamp(timestamp, schedule):
+        debug(f"valid: {timestamp}")
+
+    return timestamp
 
 
 lines = [line.strip() for line in fileinput.input()]
@@ -54,10 +69,12 @@ schedule = [b for b in lines[1].split(',')]
 debug(f"{epoch=}")
 debug(f"{schedule=}")
 
+
 # Part 1
 # wait, bus = find_wait_and_bus(epoch, schedule)
 
-answer = validate_winning_timestamp(0, schedule)
+
+answer = find_winning_timestamp(schedule)
 
 debug('---- DEBUG ENDS ----')
 
